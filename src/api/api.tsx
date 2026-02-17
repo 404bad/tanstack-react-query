@@ -10,8 +10,11 @@ export const fetchpostsbyAxios = () => {
 };
 
 // we dont need axios for tan stack
-export const fetchpostsByTan = async () => {
-  const res = await fetch("https://jsonplaceholder.typicode.com/posts");
+export const fetchpostsByTan = async (currentPage: number) => {
+  const limit = 5;
+  const res = await fetch(
+    `https://jsonplaceholder.typicode.com/posts?_start=${(currentPage - 1) * 3}&_limit=${limit}`,
+  );
   return res.status == 200 ? res.json() : [];
 };
 
