@@ -18,3 +18,16 @@ This creates a new QueryClient instance with default settings. You can configure
 
 This component is part of react-query and is used to provide the
 QueryClient instance to your entire React app (or a portion of it). This makes the qu client available via React's context API so that all the components in the tree can the useQuery, use Mutation, and other hooks provided by react-query.
+
+## queryKey
+
+The queryKey is typically an array or string that uniquely identifies a query. It allows React Query to determine if the data in the cache is associated with a particular request.
+
+It is used to cache data with a specific key and refetch or update data when certain dependencies change.
+
+#### steps
+
+```zsh
+bun add @tanstack/react-query
+
+```

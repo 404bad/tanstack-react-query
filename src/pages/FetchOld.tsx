@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchposts } from "../api/api";
+import { fetchpostsbyAxios } from "../api/api";
 
 interface Post {
   id: number;
@@ -14,7 +14,7 @@ const FetchOld = () => {
 
   const getPostData = async (): Promise<void> => {
     try {
-      const res = await fetchposts();
+      const res = await fetchpostsbyAxios();
       if (res.status === 200) {
         setPosts(res.data as Post[]);
       }
