@@ -14,11 +14,13 @@ const FetchRQ = () => {
 
   const {
     data: posts = [],
-    isLoading,
+    isPending,
     isError,
   } = useQuery<Post[]>({
     queryKey: ["posts"], // this is like useState
     queryFn: fetchpostsByTan, //this is like useEffect
+    // gcTime: 1000,
+    staleTime: 1000 * 5, // 5 sec
     // NOTE: we dont call function here  we just pass the reference
   });
 
@@ -37,7 +39,7 @@ const FetchRQ = () => {
         <p className="page-subheading">Browse all fetched entries</p>
       </div>
 
-      {isLoading && (
+      {isPending && (
         <p style={{ textAlign: "center", marginTop: "4rem" }}>Loading posts…</p>
       )}
 
@@ -53,7 +55,7 @@ const FetchRQ = () => {
         </p>
       )}
 
-      {!isLoading && !isError && (
+      {!isPending && !isError && (
         <ul className="section-accordion">
           {paginated.map((post) => {
             const isOpen = openId === post.id;

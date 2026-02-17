@@ -30,7 +30,6 @@ Used for creating, updating, or deleting data (POST, PUT, DELETE requests) and a
 ## queryKey
 
 The queryKey is typically an array or string that uniquely identifies a query. It allows React Query to determine if the data in the cache is associated with a particular request.
-
 It is used to cache data with a specific key and refetch or update data when certain dependencies change.
 
 ## Stale time
@@ -40,7 +39,7 @@ After the pizza is delivered, you consider it fresh for 10 minutes.
 
 👉 In React Query, this means if your component remounts or you revisit the page within that staleTime, it won’t refetch because the data is still considered fresh.
 
-## gc time
+## gc time (Garbage Collection Time formly cache time)
 
 How long you keep leftovers before throwing them away
 Suppose you don’t eat the pizza immediately. You keep it on the table for 4 hours. After 4 hours, the restaurant clears the table (garbage collected).
