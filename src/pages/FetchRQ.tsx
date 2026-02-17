@@ -19,8 +19,10 @@ const FetchRQ = () => {
   } = useQuery<Post[]>({
     queryKey: ["posts"], // this is like useState
     queryFn: fetchpostsByTan, //this is like useEffect
-    // gcTime: 1000,
-    staleTime: 1000 * 5, // 5 sec
+    // gcTime: 1000, // 1 sec - this will garbage collect the data after 1 sec and it will refetch the data when we access it again
+    //staleTime: 1000 * 5, // 5 sec - this will make the data fresh for 5 sec and it will not refetch the data until the data is stale
+    refetchInterval: 1000 * 3, // 3 sec - this will refetch the data every 1 sec and update the UI if there is any change in the data
+    refetchIntervalInBackground: true, // this will refetch the data even when the tab is in background
     // NOTE: we dont call function here  we just pass the reference
   });
 

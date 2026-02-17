@@ -46,6 +46,22 @@ Suppose you don’t eat the pizza immediately. You keep it on the table for 4 ho
 
 👉 In React Query, this means if a query is not used by any component, it will stay in memory (cache) for cacheTime. After that, React Query garbage collects it.
 
+## Polling
+
+In React Query, polling refers to the technique of fetching data from an API at regular intervals to keep the UI up-to-date with the latest information.
+This is especially useful for scenarios where data changes frequently and you want to display real-time updates without requiring the user to manually refresh the page.
+
+### `refetchInterval` option
+
+The simplest way to enable polling is to pass
+the 'refetchinterval option to the `useQuery` hook.
+This option specifies the interval (in milliseconds) at which React Query should automatically refetch the data.
+// When you want to fetch the data even in background or you are in another tab.
+
+### refetchIntervalin Background option
+
+If you want to continue polling even when the component is not mounted, you can use the `refetchIntervalinBackground` option.
+
 #### steps
 
 ```zsh
