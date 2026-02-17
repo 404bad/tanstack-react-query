@@ -1,18 +1,15 @@
 import { useEffect, useState } from "react";
 import { fetchpostsbyAxios } from "../api/api";
+import type { Post } from "../types";
 
-interface Post {
-  id: number;
-  title: string;
-  body: string;
-}
+const POSTS_PER_PAGE = 5;
 
 const FetchOld = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [openId, setOpenId] = useState<number | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
-  const postsPerPage = 5;
 
   const getPostData = async (): Promise<void> => {
     try {
@@ -27,6 +24,7 @@ const FetchOld = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     getPostData();
   }, []);
@@ -35,7 +33,17 @@ const FetchOld = () => {
     setOpenId((prev) => (prev === id ? null : id));
   };
 
-  const paginated = posts.slice(0, postsPerPage);
+  const goTo = (page: number): void => {
+    setCurrentPage(page);
+    setOpenId(null);
+  };
+
+  // Client-side slice — all posts are in memory, we just slice the right chunk
+  const totalPages = Math.ceil(posts.length / POSTS_PER_PAGE);
+  const paginated = posts.slice(
+    (currentPage - 1) * POSTS_PER_PAGE,
+    currentPage * POSTS_PER_PAGE,
+  );
 
   if (loading) {
     return (
@@ -46,11 +54,7 @@ const FetchOld = () => {
   if (error) {
     return (
       <p
-        style={{
-          textAlign: "center",
-          marginTop: "4rem",
-          color: "var(--red)",
-        }}
+        style={{ textAlign: "center", marginTop: "4rem", color: "var(--red)" }}
       >
         Failed to load posts.
       </p>
@@ -65,6 +69,7 @@ const FetchOld = () => {
         </h1>
         <p className="page-subheading">Browse all fetched entries</p>
       </div>
+
       {/* ── Accordion List ── */}
       <ul className="section-accordion">
         {paginated.map((post) => {
@@ -89,6 +94,50 @@ const FetchOld = () => {
           );
         })}
       </ul>
+
+      {/* ── Pagination: Prev | Page X of Y | Next ── */}
+      <div className="pagination-section">
+        <button
+          onClick={() => goTo(currentPage - 1)}
+          disabled={currentPage === 1}
+          style={{
+            opacity: currentPage === 1 ? 0.3 : 1,
+            cursor: currentPage === 1 ? "not-allowed" : "pointer",
+          }}
+        >
+          Prev
+        </button>
+
+        <span
+          style={{
+            display: "flex",
+            alignItems: "center",
+            padding: "0 1.6rem",
+            fontSize: "1.3rem",
+            fontFamily: "var(--font-display)",
+            letterSpacing: "0.1rem",
+            color: "var(--text-dim)",
+            whiteSpace: "nowrap",
+          }}
+        >
+          Page{" "}
+          <span style={{ color: "var(--accent)", margin: "0 0.6rem" }}>
+            {currentPage}
+          </span>{" "}
+          of {totalPages}
+        </span>
+
+        <button
+          onClick={() => goTo(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          style={{
+            opacity: currentPage === totalPages ? 0.3 : 1,
+            cursor: currentPage === totalPages ? "not-allowed" : "pointer",
+          }}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
