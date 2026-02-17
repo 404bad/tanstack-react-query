@@ -14,3 +14,9 @@ export const fetchpostsByTan = async () => {
   const res = await fetch("https://jsonplaceholder.typicode.com/posts");
   return res.status == 200 ? res.json() : [];
 };
+
+//fetch individual post by id
+export const fetchpostById = async (id: number) => {
+  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
+  return res.status == 200 ? res.json() : null;
+};
