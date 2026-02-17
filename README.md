@@ -25,6 +25,20 @@ The queryKey is typically an array or string that uniquely identifies a query. I
 
 It is used to cache data with a specific key and refetch or update data when certain dependencies change.
 
+## Stale time
+
+Think of it as a restaurant where you ordered a pizza.
+After the pizza is delivered, you consider it fresh for 10 minutes.
+
+👉 In React Query, this means if your component remounts or you revisit the page within that staleTime, it won’t refetch because the data is still considered fresh.
+
+## gc time
+
+How long you keep leftovers before throwing them away
+Suppose you don’t eat the pizza immediately. You keep it on the table for 4 hours. After 4 hours, the restaurant clears the table (garbage collected).
+
+👉 In React Query, this means if a query is not used by any component, it will stay in memory (cache) for cacheTime. After that, React Query garbage collects it.
+
 #### steps
 
 ```zsh

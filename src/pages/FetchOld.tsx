@@ -10,6 +10,8 @@ interface Post {
 const FetchOld = () => {
   const [posts, setPosts] = useState<Post[]>([]);
   const [openId, setOpenId] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<boolean>(false);
   const postsPerPage = 5;
 
   const getPostData = async (): Promise<void> => {
@@ -17,9 +19,12 @@ const FetchOld = () => {
       const res = await fetchpostsbyAxios();
       if (res.status === 200) {
         setPosts(res.data as Post[]);
+        setLoading(false);
       }
     } catch (error) {
       console.log(error);
+      setError(true);
+      setLoading(false);
     }
   };
   useEffect(() => {
@@ -31,6 +36,26 @@ const FetchOld = () => {
   };
 
   const paginated = posts.slice(0, postsPerPage);
+
+  if (loading) {
+    return (
+      <p style={{ textAlign: "center", marginTop: "4rem" }}>Loading posts…</p>
+    );
+  }
+
+  if (error) {
+    return (
+      <p
+        style={{
+          textAlign: "center",
+          marginTop: "4rem",
+          color: "var(--red)",
+        }}
+      >
+        Failed to load posts.
+      </p>
+    );
+  }
 
   return (
     <div>
