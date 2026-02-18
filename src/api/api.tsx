@@ -39,3 +39,19 @@ export const deletePost = async (id: number) => {
 
   return res;
 };
+
+// Update Post
+export const updatePost = async (id: number, updatedPost: Partial<Post>) => {
+  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(updatedPost),
+  });
+  if (!res.ok) {
+    throw new Error("Failed to delete post");
+  }
+
+  return res.json();
+};

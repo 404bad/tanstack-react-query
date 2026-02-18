@@ -327,6 +327,92 @@ h1 span {
   color: var(--bg);
 }
 
+/* ─── EDIT / UPDATE FORM ─────────────────────── */
+
+.edit-form {
+  margin-top: 1.4rem;
+  padding: 1.6rem;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  border-radius: var(--radius);
+  animation: fadeUp 0.4s ease both;
+}
+
+.edit-form input,
+.edit-form textarea {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.9rem 1.2rem;
+  border-radius: var(--radius);
+  font-family: var(--font-body);
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  transition:
+    border 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.edit-form input::placeholder,
+.edit-form textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.edit-form input:focus,
+.edit-form textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 10px rgba(0, 229, 160, 0.25);
+}
+
+.edit-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+/* Smaller buttons for form */
+.edit-actions button {
+  height: 3.2rem;
+  font-size: 1rem;
+  padding: 0 1.6rem;
+}
+
+.edit-actions .cancel-btn {
+  border-color: var(--red);
+  color: var(--red);
+  background: var(--red-dim);
+}
+
+.edit-actions .cancel-btn:hover {
+  background: var(--red);
+  color: #fff;
+  box-shadow: 0 0 18px rgba(255, 61, 61, 0.4);
+}
+
+/* Edit button variant */
+.edit-btn {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-dim);
+}
+
+.edit-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.edit-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  box-shadow: none;
+  background: var(--border);
+  border-color: var(--border);
+  color: var(--text-muted);
+  margin-top: 20px;
+}
+
 /* ─── FOOTER ─────────────────────────────────── */
 footer {
   height: 10rem;

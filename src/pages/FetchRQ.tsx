@@ -5,7 +5,7 @@ import {
   useQueryClient,
 } from "@tanstack/react-query";
 import { useState } from "react";
-import { deletePost, fetchpostsByTan } from "../api/api";
+import { deletePost, fetchpostsByTan, updatePost } from "../api/api";
 import { NavLink } from "react-router-dom";
 import type { Post } from "../types";
 
@@ -16,6 +16,10 @@ const totalPages = Math.ceil(TOTAL_POSTS / POSTS_PER_PAGE); // = 20
 const FetchRQ = () => {
   const [openId, setOpenId] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  const [editId, setEditId] = useState<number | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editBody, setEditBody] = useState("");
 
   const queryClient = useQueryClient();
 
@@ -44,6 +48,17 @@ const FetchRQ = () => {
         (curr) => {
           return curr?.filter((post) => post.id !== id);
         },
+      );
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: Partial<Post> }) =>
+      updatePost(id, data),
+
+    onSuccess: (updatedPost) => {
+      queryClient.setQueryData<Post[]>(["posts", currentPage], (curr = []) =>
+        curr.map((post) => (post.id === updatedPost.id ? updatedPost : post)),
       );
     },
   });
@@ -104,6 +119,62 @@ const FetchRQ = () => {
                     </NavLink>
                     <button onClick={() => deleteMutation.mutate(post.id)}>
                       Delete
+                    </button>
+                    {editId === post.id && (
+                      <form
+                        className="edit-form"
+                        onSubmit={(e) => {
+                          e.preventDefault();
+                          updateMutation.mutate({
+                            id: post.id,
+                            data: {
+                              title: editTitle || post.title,
+                              body: editBody || post.body,
+                            },
+                          });
+                          setEditId(null);
+                          setEditTitle("");
+                          setEditBody("");
+                        }}
+                        style={{ marginTop: "1rem" }}
+                      >
+                        <input
+                          value={editTitle}
+                          onChange={(e) => setEditTitle(e.target.value)}
+                          placeholder="Title"
+                          style={{ width: "100%", marginBottom: "0.5rem" }}
+                        />
+
+                        <textarea
+                          value={editBody}
+                          onChange={(e) => setEditBody(e.target.value)}
+                          placeholder="Body"
+                          style={{ width: "100%", height: "60px" }}
+                        />
+
+                        <div className="edit-actions">
+                          <button type="submit">Save</button>
+                          <button
+                            type="button"
+                            className="cancel-btn"
+                            onClick={() => setEditId(null)}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </form>
+                    )}
+
+                    <button
+                      className="edit-btn"
+                      disabled={editId === post.id}
+                      onClick={() => {
+                        setEditId(post.id);
+                        setEditTitle("");
+                        setEditBody("");
+                      }}
+                    >
+                      {editId === post.id ? "Editing..." : "Edit"}
                     </button>
                   </div>
                 )}
