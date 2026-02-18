@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { Post } from "../types";
 
 const api = axios.create({
   baseURL: "https://jsonplaceholder.typicode.com",
@@ -10,16 +11,31 @@ export const fetchpostsbyAxios = () => {
 };
 
 // we dont need axios for tan stack
-export const fetchpostsByTan = async (currentPage: number) => {
+export const fetchpostsByTan = async (currentPage: number): Promise<Post[]> => {
   const limit = 5;
   const res = await fetch(
-    `https://jsonplaceholder.typicode.com/posts?_start=${(currentPage - 1) * 3}&_limit=${limit}`,
+    `https://jsonplaceholder.typicode.com/posts?_start=${(currentPage - 1) * limit}&_limit=${limit}`,
   );
-  return res.status == 200 ? res.json() : [];
+
+  if (!res.ok) throw new Error("Failed to fetch");
+
+  const data = await res.json();
+  return data;
 };
 
 //fetch individual post by id
 export const fetchpostById = async (id: number) => {
   const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`);
   return res.status == 200 ? res.json() : null;
+};
+
+export const deletePost = async (id: number) => {
+  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, {
+    method: "DELETE",
+  });
+  if (!res.ok) {
+    throw new Error("Failed to delete post");
+  }
+
+  return res;
 };

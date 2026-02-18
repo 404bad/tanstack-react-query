@@ -1,6 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useState } from "react";
-import { fetchpostsByTan } from "../api/api";
+import { deletePost, fetchpostsByTan } from "../api/api";
 import { NavLink } from "react-router-dom";
 import type { Post } from "../types";
 
@@ -12,6 +17,8 @@ const FetchRQ = () => {
   const [openId, setOpenId] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
+  const queryClient = useQueryClient();
+
   const {
     data: posts = [],
     isPending,
@@ -21,9 +28,24 @@ const FetchRQ = () => {
     queryFn: () => fetchpostsByTan(currentPage), //this is like useEffect
     // gcTime: 1000, // 1 sec - this will garbage collect the data after 1 sec and it will refetch the data when we access it again
     //staleTime: 1000 * 5, // 5 sec - this will make the data fresh for 5 sec and it will not refetch the data until the data is stale
-    refetchInterval: 1000 * 3, // 3 sec - this will refetch the data every 1 sec and update the UI if there is any change in the data
+    refetchInterval: 1000 * 60, // 1 min - this will refetch the data every 1 sec and update the UI if there is any change in the data
     // refetchIntervalInBackground: true, // this will refetch the data even when the tab is in background
     // NOTE: we dont call function here  we just pass the reference
+    placeholderData: keepPreviousData,
+  });
+
+  //mutation function to delete the post
+  const deleteMutation = useMutation({
+    mutationFn: (id: number) => deletePost(id),
+    onSuccess: (data, id) => {
+      queryClient.setQueryData<Post[]>(
+        ["posts", currentPage],
+
+        (curr) => {
+          return curr?.filter((post) => post.id !== id);
+        },
+      );
+    },
   });
 
   const toggleAccordion = (id: number): void => {
@@ -80,6 +102,9 @@ const FetchRQ = () => {
                     <NavLink className="viewdetails" to={`/rq/${post.id}`}>
                       View Details
                     </NavLink>
+                    <button onClick={() => deleteMutation.mutate(post.id)}>
+                      Delete
+                    </button>
                   </div>
                 )}
               </li>
