@@ -37,7 +37,7 @@ const FetchRQ = () => {
   //mutation function to delete the post
   const deleteMutation = useMutation({
     mutationFn: (id: number) => deletePost(id),
-    onSuccess: (data, id) => {
+    onSuccess: (_, id) => {
       queryClient.setQueryData<Post[]>(
         ["posts", currentPage],
 
