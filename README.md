@@ -58,7 +58,7 @@ the 'refetchinterval option to the `useQuery` hook.
 This option specifies the interval (in milliseconds) at which React Query should automatically refetch the data.
 // When you want to fetch the data even in background or you are in another tab.
 
-### refetchIntervalin Background option
+### refetchIntervalinBackground option
 
 If you want to continue polling even when the component is not mounted, you can use the `refetchIntervalinBackground` option.
 
@@ -104,6 +104,38 @@ The process is the same whether you're:
 When you call.mutate(), it tells React Query to run the mutation function defined inside the useMutation hook. This is needed because the mutation is an action that changes data, unlike queries, which are used to fetch data and are often auto-executed.
 
 `queryClient.setQueryData` is used to update the cached data for a specific query. In this case, it's the query with the key ["post", pageNumber], which likely represents the list of posts on the current page.
+
+## useInfiniteQuery
+
+```javascript
+const {
+  fetchNextPage,
+  fetchPreviousPage,
+  hasNextPage,
+  hasPreviousPage,
+  isFetchingNextPage,
+  isFetchingPreviousPage,
+  promise,
+  ...result
+} = useInfiniteQuery({
+  queryKey,
+  queryFn: ({ pageParam }) => fetchPage(pageParam),
+  initialPageParam: 1,
+  ...options,
+  getNextPageParam: (lastPage, allPages, lastPageParam, allPageParams) =>
+    lastPage.nextCursor,
+  getPreviousPageParam: (firstPage, allPages, firstPageParam, allPageParams) =>
+    firstPage.prevCursor,
+});
+```
+
+### ScrolL Events
+
+- `window.innerHeight`: The height of the visible part of the webpage (the viewport).
+- `window.scrollY`: The amount of pixels the user has scrolled down the page.
+- `document.documentElement.scrollHeight`: The total height of the webpage, including the part not visible without scrolling.
+
+When the sum of `window.innerHeight` and `window.scrollY` is approximately equal to `document.documentElement.scrollHeight`, the user is near the bottom of the page.
 
 ## Steps
 

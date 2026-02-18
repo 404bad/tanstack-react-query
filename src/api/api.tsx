@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { Post } from "../types";
+import type { GitHubUser, Post } from "../types";
 
 const api = axios.create({
   baseURL: "https://jsonplaceholder.typicode.com",
@@ -54,4 +54,17 @@ export const updatePost = async (id: number, updatedPost: Partial<Post>) => {
   }
 
   return res.json();
+};
+
+//fetech user for infinite scrolling
+
+export const fetchUsers = async ({
+  pageParam,
+}: {
+  pageParam: number;
+}): Promise<GitHubUser[]> => {
+  const res = await axios.get<GitHubUser[]>(
+    `https://api.github.com/users?per_page=10&page=${pageParam}`,
+  );
+  return res.data;
 };

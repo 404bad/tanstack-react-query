@@ -413,6 +413,161 @@ h1 span {
   margin-top: 20px;
 }
 
+/* ─── USERS GRID WRAPPER ─────────────────────── */
+.users-wrapper {
+  width: 58%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding-bottom: 4rem;
+}
+
+/* ─── PAGE LIST RESET ────────────────────────── */
+.users-wrapper ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(26rem, 1fr));
+  gap: 1.2rem;
+  list-style: none;
+  margin-bottom: 1.2rem;
+}
+
+/* ─── USER CARD ──────────────────────────────── */
+.users-wrapper ul li {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 2.4rem;
+  display: flex;
+  align-items: center;
+  gap: 1.6rem;
+  list-style: none;
+  position: relative;
+  overflow: hidden;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    transform 0.2s;
+  animation: fadeUp 0.5s ease both;
+  cursor: default;
+}
+
+/* Accent left bar — same trick as accordion */
+.users-wrapper ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--border);
+  transition: background 0.2s;
+}
+
+.users-wrapper ul li:hover {
+  border-color: rgba(255, 255, 255, 0.14);
+  background: var(--surface-2);
+  transform: translateY(-2px);
+}
+
+.users-wrapper ul li:hover::before {
+  background: var(--accent);
+}
+
+/* ─── AVATAR ─────────────────────────────────── */
+.users-wrapper ul li img {
+  width: 4.8rem;
+  height: 4.8rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--border);
+  object-fit: cover;
+  flex-shrink: 0;
+  transition: border-color 0.2s;
+}
+
+.users-wrapper ul li:hover img {
+  border-color: var(--accent);
+  box-shadow: 0 0 12px rgba(0, 229, 160, 0.25);
+}
+
+/* ─── USERNAME ───────────────────────────────── */
+.users-wrapper ul li p {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.12rem;
+  text-transform: uppercase;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+/* ─── LOAD MORE / SENTINEL ───────────────────── */
+.load-sentinel {
+  margin: 3rem auto 0;
+  width: 58%;
+  text-align: center;
+  padding: 2rem;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  letter-spacing: 0.22rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-top: 1px solid var(--border);
+  position: relative;
+}
+
+/* Animated dots when fetching */
+.load-sentinel.fetching {
+  color: var(--accent);
+}
+
+.load-sentinel.fetching::after {
+  content: "";
+  display: inline-block;
+  width: 0.6rem;
+  height: 0.6rem;
+  margin-left: 1rem;
+  background: var(--accent);
+  border-radius: 50%;
+  animation: pulse 0.9s ease-in-out infinite;
+  vertical-align: middle;
+}
+
+/* ─── STATUS STATES (loading / error) ────────── */
+.status-state {
+  width: 58%;
+  margin: 8rem auto;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  letter-spacing: 0.2rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  animation: fadeUp 0.5s ease both;
+}
+
+.status-state.error {
+  color: var(--red);
+}
+
+/* Spinner ring for loading state */
+.status-state::before {
+  content: "";
+  display: block;
+  width: 3.2rem;
+  height: 3.2rem;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  margin: 0 auto 1.6rem;
+  animation: spin 0.8s linear infinite;
+}
+
+.status-state.error::before {
+  border-top-color: var(--red);
+  animation: spin 0.8s linear infinite;
+}
+
 /* ─── FOOTER ─────────────────────────────────── */
 footer {
   height: 10rem;
@@ -446,6 +601,15 @@ footer p span {
   header ul {
     gap: 2rem;
   }
+  .users-wrapper,
+  .load-sentinel,
+  .status-state {
+    width: 80%;
+  }
+
+  .users-wrapper ul {
+    grid-template-columns: repeat(auto-fill, minmax(22rem, 1fr));
+  }
 }
 
 @media (max-width: 720px) {
@@ -458,6 +622,21 @@ footer p span {
   header ul {
     display: none;
   }
+  .users-wrapper,
+  .load-sentinel,
+  .status-state {
+    width: 92%;
+  }
+
+  .users-wrapper ul {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  .users-wrapper ul {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ─── ENTRANCE ANIMATION ─────────────────────── */
@@ -469,6 +648,24 @@ footer p span {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.6);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
 }
 
